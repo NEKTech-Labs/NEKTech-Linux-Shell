@@ -20,5 +20,26 @@
 /* command Execution.*/ 
 void run_cmd(char *argv[]) 
 { 
-   
+   pid_t child_pid; 
+
+   child_pid=fork(); 
+   if(child_pid<0){ 
+      printf("SOME ERROR HAPPENED IN FORK\n"); 
+      exit(2); 
+   }else if(child_pid==0){ 
+      if(execvp(argv[0],argv)<0) 
+         switch(errno){ 
+         case ENOENT: 
+               printf("COMMAND OR FILENAME NOT FOUND\n"); 
+               break; 
+            case EACCES: 
+               printf("YOU DO NOT HAVE RIGHT TO ACCESS\n"); 
+               break; 
+                           default: 
+                                   printf("SOME ERROR HAPPENED IN EXEC\n"); 
+         } 
+         exit(3); 
+      }else 
+         wait(NULL); 
+
 }
