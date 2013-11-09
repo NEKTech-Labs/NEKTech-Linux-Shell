@@ -31,19 +31,52 @@ main()
    char *cmd_arg[MAX_ARG]; 
    int cmdlen,i,j,tag; 
 
-   do{ 
-      /* init cmd */ 
-      for(i=0;i<MAX_LEN;i++) cmd[i]='\0'; 
+   do{
+      /* init cmd */
+      for(i=0;i<MAX_LEN;i++) cmd[i]='\0';
 
-      printf("NEK Tech>> "); 
-      fgets(cmd,MAX_LEN,stdin); 
+      printf("NEK Tech>> ");
+      fgets(cmd,MAX_LEN,stdin);
 
-      cmdlen=strlen(cmd); 
-      cmdlen--; 
-      cmd[cmdlen]='\0'; 
+      cmdlen=strlen(cmd);
+      cmdlen--;
+      cmd[cmdlen]='\0';
 
+      for(i=0;i<MAX_ARG;i++) cmd_arg[i]=NULL;
+      i=0; j=0; tag=0;
+      while(i<cmdlen && j<MAX_ARG){
+         if(cmd[i]==' '){
+            cmd[i]='\0';
+            tag=0;
+         }else{
+            if(tag==0)
+               cmd_arg[j++]=cmd+i;
+            tag=1;
+         }
+         i++;
+      }
+       
+      if(j>=MAX_ARG && i<cmdlen){
+         printf("TOO MANY ARGUMENTS\n");
+         continue;
+      }
+      /* cmd_arg NULL Condition. */
+      if (cmd_arg[0] == NULL )
+         continue;
+      /* cmd quit/exit/q: exit NEK Tech Shell */
+      if((strcmp(cmd_arg[0],"quit")==0) || (strcmp(cmd_arg[0],"exit")== 0) || (strcmp(cmd_arg[0],"q")== 0))
+         break;
+
+      /* command change Directory */
+      if(strcmp(cmd_arg[0],"cd")==0){
+         change_dir(cmd_arg);
+         continue;
+      }
+       
+      /* other cmd for fork/exec*/
+      run_cmd(cmd_arg);
    }while(1); 
-} 
+}
 
 /* cd - Change Directory
  * Shell internal Command to chanfe the present working Directory.
