@@ -85,5 +85,20 @@ main()
 */ 
 void change_dir(char *argv[]) 
 { 
-
+   if(argv[1]!=NULL){
+      if(chdir(argv[1])<0)
+         switch(errno){
+         case ENOENT:
+            printf("DIRECTORY NOT FOUND\n");
+            break;
+         case ENOTDIR:
+            printf("NOT A DIRECTORY NAME\n");
+            break;
+         case EACCES:
+            printf("YOU DO NOT HAVE RIGHT TO ACCESS\n");
+            break;
+         default:
+            printf("SOME ERROR HAPPENED IN CHDIR\n");
+         }
+   } 
 }
