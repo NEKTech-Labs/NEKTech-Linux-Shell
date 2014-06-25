@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+
+=======
 /* NEK Tech shell */ 
+>>>>>>> d7f52761e98c3e5e5b5c6062e1a5e7bd45d47402
 /*
  * input_parser.c - Linux Shell 
  *
@@ -12,12 +16,22 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+<<<<<<< HEAD
+=======
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
+>>>>>>> d7f52761e98c3e5e5b5c6062e1a5e7bd45d47402
  */
 
 #include <sys/wait.h> 
 #include <string.h> 
+<<<<<<< HEAD
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+=======
+>>>>>>> d7f52761e98c3e5e5b5c6062e1a5e7bd45d47402
 #include "nektech_shell.h"
 
 /* Taking User Input and Parsing the input to take action.
@@ -25,6 +39,12 @@
  * Developer: Deepika Pandey
 */ 
 
+<<<<<<< HEAD
+int search_path(char *,int,int );
+
+
+=======
+>>>>>>> d7f52761e98c3e5e5b5c6062e1a5e7bd45d47402
 main() 
 { 
    char cmd[MAX_LEN]; 
@@ -85,6 +105,20 @@ main()
 */ 
 void change_dir(char *argv[]) 
 { 
+<<<<<<< HEAD
+
+int fp;
+int c;
+int i=0;
+static char buffer[200];
+int End_File_Position;
+int Current_Position=1;
+int flag=0;
+int repeat=0;
+
+
+=======
+>>>>>>> d7f52761e98c3e5e5b5c6062e1a5e7bd45d47402
    if(argv[1]!=NULL){
       if(chdir(argv[1])<0)
          switch(errno){
@@ -101,4 +135,118 @@ void change_dir(char *argv[])
             printf("SOME ERROR HAPPENED IN CHDIR\n");
          }
    } 
+<<<<<<< HEAD
+   else{
+       
+    		fp = open("/etc/passwd",O_RDONLY);
+    		if( fp == -1 )
+    		{
+        		//printf("\n Unable to reach /dir with error [%s]\n",strerror(errno));
+    		}
+    		else
+    		{
+        	    // printf("\n Open() Successful\n");
+                     
+                      End_File_Position=lseek(fp,0L,2);  //reach the end of the file
+                        
+                      lseek(fp,0L,0);     // set file pointer to start
+
+
+                       if( read(fp,buffer,End_File_Position) )
+                       {
+    		         
+                         search_path(buffer,End_File_Position,getuid());  //call serching function for search home path
+                       			
+                       }					
+                
+ 	      } 
+         }
+       
+}     
+
+
+
+int search_path(char *ptr,int size,int userid)
+{
+int count=0,i=0,j=0,k=0,flag=0;
+char temp[100];
+char *temp_arg[1];
+
+         while(	i < size)
+         {
+                       if( *ptr == '\n'  ){
+                          
+                          		for(k=0;k<100;k++) temp[k]='\0';
+                         
+                			count = 0;   // intializing delimiter for every new line
+                         		j=0;
+                        		flag=0;
+  		       }
+
+       		       if(*ptr == ':')
+          		   	count++;
+       					  
+
+         		if(count == 2){
+                                         
+					temp[j]= *ptr;
+        			        j++;
+                                      
+         		}
+       			if(count == 3)
+         		{
+          			    temp[j] = '\0';
+           			    j=0;  
+                          
+                                 for(k=0; temp[k] != '\0';k++)      // for removing : so that swapping performed
+                                 temp[k]=temp[k+1];
+                                 temp[k]='\0';
+                            
+			    if(atoi(temp)==userid) 
+                            flag=1;
+                                            
+         		}
+
+         		if(count == 5 && flag == 1)
+                        {
+                         
+                              temp[j] = *ptr;
+                    
+                         j++;
+                        }
+
+       
+                       if(count == 6 && flag == 1  )
+                        {
+                             for(k=0; temp[k] != '\0';k++)      // for removing : so that swapping performed
+                                 temp[k]=temp[k+1];
+                                 temp[k]='\0';
+
+                         flag=0;
+
+                         temp_arg[1]=temp;
+                         
+                         /*printf("%s\n",temp);
+
+
+                         */
+                         change_dir(temp_arg);
+                         break;
+                        }
+       
+        ptr++;
+        i++;
+ 	
+	}
+
+return 0;
 }
+
+
+
+
+
+
+=======
+}
+>>>>>>> d7f52761e98c3e5e5b5c6062e1a5e7bd45d47402
