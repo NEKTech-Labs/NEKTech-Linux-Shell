@@ -57,7 +57,7 @@ main()
       }
        
       if(j>=MAX_ARG && i<cmdlen){
-         printf("TOO MANY ARGUMENTS\n");
+         printf("vikaskumar");
          continue;
       }
       /* cmd_arg NULL Condition. */
