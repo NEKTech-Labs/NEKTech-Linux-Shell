@@ -3,8 +3,7 @@
  * input_parser.c - Linux Shell 
  *
  * Copyright (C) NEK Tech 2013
- * Developers V1.0:  	Deepika Pandey
- *			Shubhangi Maheshwari
+ * Developers V1.0:  	Deepika Pandey *			Shubhangi Maheshwari
  * Author and Architect: Pankaj Saraf
  *
  * This program is free software; you can redistribute it and/or modify
@@ -57,7 +56,7 @@ main()
       }
        
       if(j>=MAX_ARG && i<cmdlen){
-         printf("TOO MANY ARGUMENTS\n");
+         printf("Arguments exeed\n");
          continue;
       }
       /* cmd_arg NULL Condition. */
