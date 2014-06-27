@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 
-=======
-/* NEK Tech shell */ 
->>>>>>> d7f52761e98c3e5e5b5c6062e1a5e7bd45d47402
 /*
  * input_parser.c - Linux Shell 
  *
@@ -16,35 +12,33 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-<<<<<<< HEAD
-=======
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
->>>>>>> d7f52761e98c3e5e5b5c6062e1a5e7bd45d47402
  */
 
 #include <sys/wait.h> 
 #include <string.h> 
-<<<<<<< HEAD
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-=======
->>>>>>> d7f52761e98c3e5e5b5c6062e1a5e7bd45d47402
 #include "nektech_shell.h"
 
 /* Taking User Input and Parsing the input to take action.
  * String operations and intelligece for user input.
  * Developer: Deepika Pandey
-*/ 
 
-<<<<<<< HEAD
-int search_path(char *,int,int );
+ * Provide suppoert for cd command when no argument pass.
+ * then cd cammand redirect automatically user's home 
+ * folder.
+ * Developer: Jitendra Khasdev
+ */
+
+ 
+
+int search_path(char *,int);
 
 
-=======
->>>>>>> d7f52761e98c3e5e5b5c6062e1a5e7bd45d47402
 main() 
 { 
    char cmd[MAX_LEN]; 
@@ -103,22 +97,26 @@ main()
  * It calls chdir(). Error conditions: EACCESS, EPERM, ENOENT.
  * Developer: Shubhangi Maheshwari
 */ 
-void change_dir(char *argv[]) 
+
+/*
+ *cd - Change Direcotry
+ *when this command is passed without any argument then
+ *it will rediredt to home folder of the user
+ *Developer: Jitendra Khasdev
+ */
+int change_dir(char *argv[]) 
 { 
-<<<<<<< HEAD
 
 int fp;
 int c;
-int i=0;
-static char buffer[200];
+int i=0,k,j;
+static char buffer[200],temp[500];
 int End_File_Position;
 int Current_Position=1;
 int flag=0;
 int repeat=0;
+int count=0;
 
-
-=======
->>>>>>> d7f52761e98c3e5e5b5c6062e1a5e7bd45d47402
    if(argv[1]!=NULL){
       if(chdir(argv[1])<0)
          switch(errno){
@@ -135,68 +133,93 @@ int repeat=0;
             printf("SOME ERROR HAPPENED IN CHDIR\n");
          }
    } 
-<<<<<<< HEAD
    else{
        
-    		fp = open("/etc/passwd",O_RDONLY);
+
+                fp = open("/etc/passwd",O_RDONLY);
+
+                //printf(" fd == %d\n",fp);
+
     		if( fp == -1 )
     		{
-        		//printf("\n Unable to reach /dir with error [%s]\n",strerror(errno));
+        		printf("\n Unable to reach /dir with error [%s]\n",strerror(errno));
     		}
     		else
     		{
-        	    // printf("\n Open() Successful\n");
                      
                       End_File_Position=lseek(fp,0L,2);  //reach the end of the file
                         
                       lseek(fp,0L,0);     // set file pointer to start
 
+                  
+ 	               while(i < End_File_Position){
+                    	
+				for(k=0;k<200;k++) buffer[k]='\0';    //initiallzation of buffer
 
-                       if( read(fp,buffer,End_File_Position) )
-                       {
-    		         
-                         search_path(buffer,End_File_Position,getuid());  //call serching function for search home path
-                       			
-                       }					
+                    	 		if(count =  read( fp, buffer, sizeof(buffer) )   ){
+
+                       				for(k=0,j=0;k<200;k++,j++){
+
+                                           	    temp[j]=*(buffer +k);
+                                                    
+						    if( *(buffer+k) == '\n' ){
+                                                    	       if( search_path(temp,getuid()) != 0){
+                                                     						for(j=0;j<500;j++)
+                                                         					temp[j]='\0';				     
+												j=0; 
+                                                          
+                                                                }
+                                                                else
+                                                                    break;
+                                                                  
+                                                     }
+
+                                                }
+                                         }
+
+                         i=i+count;
+                        }
                 
- 	      } 
+ 	        } 
          }
-       
+
+return 1;    
 }     
 
+/*
+ *This function finds the path of the current user's home 
+ *folder 
+ */
 
-
-int search_path(char *ptr,int size,int userid)
+int search_path(char *ptr,int userid)
 {
 int count=0,i=0,j=0,k=0,flag=0;
 char temp[100];
 char *temp_arg[1];
 
-         while(	i < size)
+                      	
+	 for(k=0;k<100;k++) temp[k]='\0';
+         
+	 while(*(ptr) != '\n')
          {
-                       if( *ptr == '\n'  ){
                           
-                          		for(k=0;k<100;k++) temp[k]='\0';
                          
-                			count = 0;   // intializing delimiter for every new line
-                         		j=0;
-                        		flag=0;
-  		       }
+                	  // count = 0;   // intializing delimiter for every new line
+                          // j=0;
+                          // flag=0;
 
-       		       if(*ptr == ':')
+       		       if(*(ptr) == ':')
           		   	count++;
        					  
 
          		if(count == 2){
-                                         
-					temp[j]= *ptr;
-        			        j++;
-                                      
-         		}
+                                   temp[j]= *ptr;
+        			   j++;
+                        }
        			if(count == 3)
          		{
-          			    temp[j] = '\0';
-           			    j=0;  
+          			  temp[j] = '\0';
+           			  j=0;  
                           
                                  for(k=0; temp[k] != '\0';k++)      // for removing : so that swapping performed
                                  temp[k]=temp[k+1];
@@ -231,15 +254,18 @@ char *temp_arg[1];
 
                          */
                          change_dir(temp_arg);
-                         break;
+
+                         return 0;
                         }
+
+             // printf("file descriptor == %d",f);
        
         ptr++;
-        i++;
+        //i++;
  	
 	}
 
-return 0;
+return 1;
 }
 
 
@@ -247,6 +273,4 @@ return 0;
 
 
 
-=======
-}
->>>>>>> d7f52761e98c3e5e5b5c6062e1a5e7bd45d47402
+
