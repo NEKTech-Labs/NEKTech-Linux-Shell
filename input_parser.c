@@ -5,6 +5,7 @@
  * Copyright (C) NEK Tech 2013
  * Developers V1.0:  	Deepika Pandey
  *			Shubhangi Maheshwari
+ * 
  * Author and Architect: Pankaj Saraf
  *
  * This program is free software; you can redistribute it and/or modify
@@ -86,7 +87,6 @@ main()
          change_dir(cmd_arg);
          continue;
       }
-       
       /* other cmd for fork/exec*/
       run_cmd(cmd_arg);
    }while(1); 
@@ -107,15 +107,10 @@ main()
 int change_dir(char *argv[]) 
 { 
 
-int fp;
-int c;
-int i=0,k,j;
-static char buffer[200],temp[500];
+int fp,c,i=0,k,j;
+static char buffer[200],temp[200];
 int End_File_Position;
-int Current_Position=1;
-int flag=0;
-int repeat=0;
-int count=0;
+int Current_Position=1,flag=0,repeat=0,count=0;
 
    if(argv[1]!=NULL){
       if(chdir(argv[1])<0)
@@ -137,8 +132,6 @@ int count=0;
        
 
                 fp = open("/etc/passwd",O_RDONLY);
-
-                //printf(" fd == %d\n",fp);
 
     		if( fp == -1 )
     		{
@@ -203,11 +196,6 @@ char *temp_arg[1];
 	 while(*(ptr) != '\n')
          {
                           
-                         
-                	  // count = 0;   // intializing delimiter for every new line
-                          // j=0;
-                          // flag=0;
-
        		       if(*(ptr) == ':')
           		   	count++;
        					  
@@ -249,19 +237,11 @@ char *temp_arg[1];
 
                          temp_arg[1]=temp;
                          
-                         /*printf("%s\n",temp);
-
-
-                         */
                          change_dir(temp_arg);
 
                          return 0;
                         }
-
-             // printf("file descriptor == %d",f);
-       
-        ptr++;
-        //i++;
+            ptr++;
  	
 	}
 
