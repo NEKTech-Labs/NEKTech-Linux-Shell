@@ -40,13 +40,10 @@ char *newargv[16];
 
 
 	for(i=0;argv[i] != NULL ;i++){                /* Check weather pipe is present or not */
-               
-
-              if( (check = strcmp(argv[i],"|")) == 0){
-                 flag = 1;
-           }
-
-	}
+            if( (check = strcmp(argv[i],"|")) == 0){
+            flag = 1;
+            }
+        }
  
 
  	if(flag == 0)           /*call execute_cmd function when pipe is not detected*/                         
@@ -54,26 +51,18 @@ char *newargv[16];
              execute_cmd(argv,0);                
 	}
  	else{
-       
-	     for(i=0,j=0;argv[i];i++){
-                
+              for(i=0,j=0;argv[i];i++){
                   if(strcmp(argv[i],"|")!=0){
-                     
-                    
-                        newargv[j] = argv[i];
-
-                    j++;
-                     
-                   }
-                   else{
-                      newargv[j]='\0';
-                        j=0;    
-                      argv[i]='\0';
-                      execute_cmd(newargv,1);
-                   }
-                            
-               }
-
+                     newargv[j] = argv[i];
+                     j++;
+                  }
+                  else{
+                     newargv[j]='\0';
+                     j=0;    
+                     argv[i]='\0';
+                     execute_cmd(newargv,1);
+                  }
+            }
             execute_cmd(newargv,2);
 	}
 
@@ -99,7 +88,7 @@ pid_t child_pid;
       printf("SOME ERROR HAPPENED IN FORK\n");
       exit(2);
    }else if(child_pid==0){
-
+        
         if(signal == 1){
         fp=open("nek.txt",O_WRONLY | O_CREAT, 0666);
   	dup2(fp,1);
@@ -109,10 +98,9 @@ pid_t child_pid;
         fp=open("nek.txt",O_RDONLY);
         dup2(fp,0);
         }
-     
         if(execvp(argv[0],argv)<0)
          switch(errno){
-         case ENOENT:
+            case ENOENT:
                printf("COMMAND OR FILENAME NOT FOUND\n");
                break;
             case EACCES:

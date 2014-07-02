@@ -129,52 +129,40 @@ int Current_Position=1,flag=0,repeat=0,count=0;
          }
    } 
    else{
-       
-
-                fp = open("/etc/passwd",O_RDONLY);
-
-    		if( fp == -1 )
-    		{
-        		printf("\n Unable to reach /dir with error [%s]\n",strerror(errno));
-    		}
-    		else
-    		{
-                     
-                      End_File_Position=lseek(fp,0L,2);  //reach the end of the file
-                        
-                      lseek(fp,0L,0);     // set file pointer to start
-
-                  
- 	               while(i < End_File_Position){
-                    	
-				for(k=0;k<200;k++) buffer[k]='\0';    //initiallzation of buffer
-
-                    	 		if(count =  read( fp, buffer, sizeof(buffer) )   ){
-
-                       				for(k=0,j=0;k<200;k++,j++){
-
-                                           	    temp[j]=*(buffer +k);
-                                                    
-						    if( *(buffer+k) == '\n' ){
-                                                    	       if( search_path(temp,getuid()) != 0){
-                                                     						for(j=0;j<500;j++)
-                                                         					temp[j]='\0';				     
-												j=0; 
-                                                          
-                                                                }
-                                                                else
-                                                                    break;
-                                                                  
-                                                     }
-
-                                                }
-                                         }
-
-                         i=i+count;
-                        }
-                
- 	        } 
+         fp = open("/etc/passwd",O_RDONLY);
+         
+         if( fp == -1 ){
+               printf("\n Unable to reach /dir with error [%s]\n",strerror(errno));
          }
+    	 else{
+              End_File_Position=lseek(fp,0L,2);  //reach the end of the file
+                        
+              lseek(fp,0L,0);     // set file pointer to start
+
+              while(i < End_File_Position){
+                   
+                for(k=0;k<200;k++) buffer[k]='\0';    //initiallzation of buffer
+
+                if(count =  read( fp, buffer, sizeof(buffer) ) ){
+
+                      for(k=0,j=0;k<200;k++,j++){
+                         temp[j]=*(buffer +k);
+                         if( *(buffer+k) == '\n' ){
+                                 if( search_path(temp,getuid()) != 0){
+                                             for(j=0;j<500;j++)
+                                               temp[j]='\0';				     
+												
+                                  j=0; 
+                                  }
+                                  else
+                                      break;
+                         }
+                      }
+                 }
+                 i=i+count;
+             }
+         } 
+     }
 
 return 1;    
 }     
@@ -192,58 +180,51 @@ char *temp_arg[1];
 
                       	
 	 for(k=0;k<100;k++) temp[k]='\0';
-         
-	 while(*(ptr) != '\n')
+       	 while(*(ptr) != '\n')
          {
-                          
-       		       if(*(ptr) == ':')
-          		   	count++;
-       					  
-
-         		if(count == 2){
-                                   temp[j]= *ptr;
-        			   j++;
-                        }
-       			if(count == 3)
-         		{
-          			  temp[j] = '\0';
-           			  j=0;  
-                          
-                                 for(k=0; temp[k] != '\0';k++)      // for removing : so that swapping performed
-                                 temp[k]=temp[k+1];
-                                 temp[k]='\0';
+           if(*(ptr) == ':')
+           count++;
+           
+           if(count == 2){
+           temp[j]= *ptr;
+           j++;
+           }
+       			
+           if(count == 3){
+            temp[j] = '\0';
+            j=0;  
+                 
+            for(k=0; temp[k] != '\0';k++)      // for removing : so that swapping performed
+            temp[k]=temp[k+1];
+                                 
+            temp[k]='\0';
                             
-			    if(atoi(temp)==userid) 
-                            flag=1;
-                                            
-         		}
+	      if(atoi(temp)==userid) 
+               flag=1;
+            }
 
-         		if(count == 5 && flag == 1)
-                        {
+            if(count == 5 && flag == 1){
+             temp[j] = *ptr;
+             j++;
+            }
+
+            if(count == 6 && flag == 1  ){
+              for(k=0; temp[k] != '\0';k++)      // for removing : so that swapping performed
+              temp[k]=temp[k+1];
+                                 
+              temp[k]='\0';
+
+              flag=0;
+
+              temp_arg[1]=temp;
                          
-                              temp[j] = *ptr;
-                    
-                         j++;
-                        }
+              change_dir(temp_arg);
 
-       
-                       if(count == 6 && flag == 1  )
-                        {
-                             for(k=0; temp[k] != '\0';k++)      // for removing : so that swapping performed
-                                 temp[k]=temp[k+1];
-                                 temp[k]='\0';
-
-                         flag=0;
-
-                         temp_arg[1]=temp;
-                         
-                         change_dir(temp_arg);
-
-                         return 0;
-                        }
-            ptr++;
- 	
-	}
+              return 0;
+           }
+            
+        ptr++;
+ 	}
 
 return 1;
 }
