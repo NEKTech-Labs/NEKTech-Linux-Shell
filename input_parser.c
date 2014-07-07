@@ -25,6 +25,13 @@
  * Developer: Deepika Pandey
 */ 
 
+/* Identify Append string from the user input. 
+ * Developer:    Vikas Kumar  
+*/
+
+int append_flag =0;
+char *file_name=NULL;
+
 main() 
 { 
    char cmd[MAX_LEN]; 
@@ -57,9 +64,18 @@ main()
       }
        
       if(j>=MAX_ARG && i<cmdlen){
-         printf("vikaskumar");
+         printf("argument exceed");
          continue;
       }
+
+   /* Identify Append  */
+      for(i=0; *(cmd_arg+i)!=NULL; i++)
+	 if(strcmp(cmd_arg[i],">>")==0){
+           append_flag =1;
+           *(cmd_arg+i)=NULL;
+           file_name = cmd_arg[++i];
+        }
+
       /* cmd_arg NULL Condition. */
       if (cmd_arg[0] == NULL )
          continue;
@@ -75,6 +91,8 @@ main()
        
       /* other cmd for fork/exec*/
       run_cmd(cmd_arg);
+    append_flag=0;
+    file_name=NULL;
    }while(1); 
 }
 

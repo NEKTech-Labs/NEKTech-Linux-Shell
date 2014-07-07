@@ -16,18 +16,55 @@
  */
 
 #include "nektech_shell.h"
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/file.h>
+
+/* Implementation of Append code.
+ * Developer:  Vikas kumar
+*/
+
+extern int redirect_flag,append_flag;
+extern char *file_name;
 
 /* command Execution.*/ 
 void run_cmd(char *argv[]) 
 { 
    pid_t child_pid; 
+   int fd;    
 
    child_pid=fork(); 
    if(child_pid<0){ 
       printf("SOME ERROR HAPPENED IN FORK\n"); 
       exit(2); 
    }else if(child_pid==0){ 
-      if(execvp(argv[0],argv)<0) 
+
+ /*  append code  */
+    if (append_flag){
+        fd=open(file_name, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWGRP | S_IWUSR);
+   /*  Handling of file creation  */
+      if(fd<0)
+        switch(errno){
+        case EACCES:
+              printf("The requested access to the file is not allowed,%s\npermission is denied",file_name);
+              break;
+           case ENOENT:
+              printf("O_CREAT is not set and the named file: %s does not exist",file_name);
+              break;
+           case ENOMEM:
+              printf("Insufficient kernel memory was available.");
+              break;
+                              default:
+                                     printf("Some error is happened in creating the requested file: %s",file_name);
+                                     break;
+        }
+        else{
+        dup2(fd,1);
+        close(fd);
+       }
+         }
+
+     if(execvp(argv[0],argv)<0) 
          switch(errno){ 
          case ENOENT: 
                printf("COMMAND OR FILENAME NOT FOUND\n"); 
