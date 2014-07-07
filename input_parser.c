@@ -3,7 +3,8 @@
  * input_parser.c - Linux Shell 
  *
  * Copyright (C) NEK Tech 2013
- * Developers V1.0:  	Deepika Pandey *			Shubhangi Maheshwari
+ * Developers V1.0:  	Deepika Pandey
+ *			Shubhangi Maheshwari
  * Author and Architect: Pankaj Saraf
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,6 +25,8 @@
  * Developer: Deepika Pandey
 */ 
 
+int redirect_flag =0, append_flag =0;
+char *file_name=NULL;
 main() 
 { 
    char cmd[MAX_LEN]; 
@@ -31,7 +34,7 @@ main()
    int cmdlen,i,j,tag; 
 
    do{
-      /* init cmd */
+
       for(i=0;i<MAX_LEN;i++) cmd[i]='\0';
 
       printf("NEK Tech>> ");
@@ -41,8 +44,11 @@ main()
       cmdlen--;
       cmd[cmdlen]='\0';
 
+
       for(i=0;i<MAX_ARG;i++) cmd_arg[i]=NULL;
+
       i=0; j=0; tag=0;
+
       while(i<cmdlen && j<MAX_ARG){
          if(cmd[i]==' '){
             cmd[i]='\0';
@@ -52,13 +58,35 @@ main()
                cmd_arg[j++]=cmd+i;
             tag=1;
          }
-         i++;
+       i++;
       }
        
       if(j>=MAX_ARG && i<cmdlen){
-         printf("Arguments exeed\n");
+         printf("arguments exceed");
          continue;
       }
+   
+/* Identify Append string from the user input. 
+ * Identify Redirection output string from the user input.
+ * Developer:    Vikas Kumar
+ *               Neha choudhary   
+*/
+   
+    for(i=0; *(cmd_arg+i)!=NULL; i++){
+  /* Identify Append  */
+      if(strcmp(cmd_arg[i],">>")==0){
+    	append_flag =1;  
+	*(cmd_arg+i)=NULL;
+	 file_name = cmd_arg[++i];
+	} 
+  /*  Identify redirection  */
+ 	if(strcmp(cmd_arg[i],">")==0){
+	redirect_flag=1;
+	*(cmd_arg+i)=NULL;
+	file_name=*(cmd_arg+i+1);
+	} 
+      }
+  
       /* cmd_arg NULL Condition. */
       if (cmd_arg[0] == NULL )
          continue;
@@ -70,11 +98,15 @@ main()
       if(strcmp(cmd_arg[0],"cd")==0){
          change_dir(cmd_arg);
          continue;
-      }
-       
-      /* other cmd for fork/exec*/
-      run_cmd(cmd_arg);
-   }while(1); 
+      } 
+
+      
+     /* other cmd for fork/exec*/
+  	    run_cmd(cmd_arg);
+	 append_flag=0;
+         redirect_flag=0;
+  	file_name=NULL;    
+}while(1); 
 }
 
 /* cd - Change Directory
