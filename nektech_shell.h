@@ -29,10 +29,10 @@
 /* NEK Tech Shell:
  * Changes Directory of the shell process.
  */
-void change_dir(char *argv[]);
+int nektech_change_dir(char *argv[]);
 
 /* NEK Tech Shell:
  * Executes the command in traditional fork/exec manner.
  */
-void run_cmd(char *argv[]);
+void nektech_run_cmd(char *argv[]);
 
