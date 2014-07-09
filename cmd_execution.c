@@ -1,4 +1,3 @@
-
 /*
  * cmd_execution.c - Linux Shell 
  *
@@ -24,7 +23,15 @@
 #include <unistd.h>
 #include <string.h>
 
-
+/*
+ *NEKTech Research Labs
+ *
+ *Function name : nektech_run_cmd()
+ *Description   : This fuction forks a new process and exec() it with the 
+ *                respective binaries provided in the arguments.
+ *Developer     : Pallavi Gadge
+ *		: jitendra khasdev
+ */
 void nektech_run_cmd(char *argv[]) 
 {
 pid_t child_pid;
