@@ -39,14 +39,12 @@
  * folder.
  * Developer: Jitendra Khasdev
  */
-
- 
-
+int nektech_etc_passwd_search();
 int nektech_search_path(char *,int);
 
 char *nk_temp_arg[1];
 
-main() 
+int main() 
 { 
    char cmd[MAX_LEN]; 
    char *cmd_arg[MAX_ARG]; 
@@ -98,15 +96,16 @@ main()
    }while(1); 
 }
 
-/* cd - Change Directory
- * Shell internal Command to chanfe the present working Directory.
- * It calls chdir(). Error conditions: EACCESS, EPERM, ENOENT.
- * Developer: Shubhangi Maheshwari
+/* Function name	: nektech_change_dir () 
+ * Description		: Changes Directory of the shell process to the directory
+ *			  given as user input.cd is Shell internal Command to 
+ *			  change the present working Directory.It calls chdir(). 
+ * Error conditions	: EACCESS, EPERM, ENOENT, ENOTDIR
+ * Developer		: Shubhangi Maheshwari
+ * 			  Jitendra Khasdev (cd command with home directoty intelligence)
 */ 
-
 int nektech_change_dir(char *argv[]) 
 { 
-
 
    if(argv[1]!=NULL){
       
@@ -133,12 +132,15 @@ int nektech_change_dir(char *argv[])
          }
    } 
    else{
-        nektech_etc_passwd_search();
+        if (nektech_etc_passwd_search()){
+		printf("Missing system file./n");
+		return -1;
+	}
         nektech_change_dir(nk_temp_arg);    
    }
 
-return 1;    
-}     
+   return 1;    
+}
 
 /*
  *NEKTech Research Labs
@@ -159,13 +161,14 @@ return 1;
 int nektech_etc_passwd_search()
 {
 
-int fp,c,i=0,k,j;
+int fp, c, i=0, k, j, ret = 0;
 static char buffer[200],temp[200];
 int end_file_position, current_position=1,flag=0,repeat=0,count=0;
  
      fp = open("/etc/passwd",O_RDONLY);
      if( fp == -1 ){
        printf("\n Unable to reach /dir with error [%s]\n",strerror(errno));
+       ret = -1;
      }
      else{
         end_file_position=lseek(fp,0L,2);  //reach the end of the file
@@ -189,7 +192,7 @@ int end_file_position, current_position=1,flag=0,repeat=0,count=0;
         i=i+count;
         }
      } 
-return 0;
+     return ret;
 }
 
 /*
