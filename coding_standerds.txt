@@ -1,0 +1,62 @@
+Defining Macros:
+It should start with NT (Which stands for NEKTech). 
+e.g. NEKTech_MAX_PATH
+
+Defining functions and global variable:
+It should stat with nektech
+e.g. nektech_change_dir()
+
+
+
+Comment Sections standards:
+
+Example of Format for new functions:
+/*
+ *NEKTech Research Labs
+ *
+ *Function name : nektech_etc_passwd_search()
+ *Description   : This fuction is used for getting home directory path 
+ *                from /etc/passwd file.
+ *
+ *working       : 1. open /etc/passwd file 
+ *                2. store line till '\n' character  
+ *                3. then call nektech_search_path(char *ptr,int userid)
+ *                4. which give path in global variable nk_temp_arg[1]
+ *                5. it is used in change_dir function.
+ * 
+ *Developer     : jitendra khasdev
+ *
+ */
+------------
+Example of Format for new Structures:
+/*
+ *NEKTech Research Labs
+ *
+ *Structure name : 
+ *Description    :
+ *Developer      : 
+ *
+ */
+----------
+Example of Format of header for new files:
+
+ /*
+ * filename - Linux Shell 
+ *
+ * Copyright (C) NEK Tech 2013
+ * Developers V1.0:  
+ *
+ * Copyright (C) NEK Tech 2014
+ * Developer  V2.0:    
+ *
+ * Author and Architect: Pankaj Saraf
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms and conditions of NEK Tech.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
+
