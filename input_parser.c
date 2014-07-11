@@ -23,16 +23,21 @@
 /* Taking User Input and Parsing the input to take action.
  * String operations and intelligece for user input.
  * Developer: Deepika Pandey
-*/ 
+*/
 
-int redirect_flag =0, append_flag =0;
+/* Identify Redirection output string from the user input.
+ * Developer:    Neha choudhary   
+*/
+ 
+int redirect_flag =0;
 char *file_name=NULL;
+
 main() 
 { 
    char cmd[MAX_LEN]; 
    char *cmd_arg[MAX_ARG]; 
    int cmdlen,i,j,tag; 
-
+  
    do{
 
       for(i=0;i<MAX_LEN;i++) cmd[i]='\0';
@@ -65,29 +70,21 @@ main()
          printf("arguments exceed");
          continue;
       }
+    
    
-/* Identify Append string from the user input. 
- * Identify Redirection output string from the user input.
- * Developer:    Vikas Kumar
- *               Neha choudhary   
-*/
-   
-    for(i=0; *(cmd_arg+i)!=NULL; i++){
-  /* Identify Append  */
-      if(strcmp(cmd_arg[i],">>")==0){
-    	append_flag =1;  
-	*(cmd_arg+i)=NULL;
-	 file_name = cmd_arg[++i];
-	} 
+    for(i=0; *(cmd_arg+i)!=NULL; i++)
   /*  Identify redirection  */
  	if(strcmp(cmd_arg[i],">")==0){
 	redirect_flag=1;
 	*(cmd_arg+i)=NULL;
 	file_name=*(cmd_arg+i+1);
-	} 
-      }
-  
-      /* cmd_arg NULL Condition. */
+          if(file_name==NULL){
+	     printf("NEKTech_Shell: syntax error near unexpected command\n");
+	     exit(1);
+	}
+     }
+      
+   /* cmd_arg NULL Condition. */
       if (cmd_arg[0] == NULL )
          continue;
       /* cmd quit/exit/q: exit NEK Tech Shell */
@@ -102,9 +99,9 @@ main()
 
       
      /* other cmd for fork/exec*/
-  	    run_cmd(cmd_arg);
-	 append_flag=0;
-         redirect_flag=0;
+  	 
+      run_cmd(cmd_arg);
+	redirect_flag=0;
   	file_name=NULL;    
 }while(1); 
 }
