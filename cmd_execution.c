@@ -15,6 +15,10 @@
  *
  */
 
+/* Implementation of redirection output string.
+ * Developer:  Neha Choudhary
+*/
+
 #include "nektech_shell.h"
 #include <sys/stat.h>
 #include <fcntl.h>
