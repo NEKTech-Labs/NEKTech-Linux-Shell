@@ -77,7 +77,7 @@ main()
  	if(strcmp(cmd_arg[i],">")==0){
 	redirect_flag=1;
 	*(cmd_arg+i)=NULL;
-	file_name=*(cmd_arg+i+1);
+	file_name=(cmd_arg[++i]);
           if(file_name==NULL){
 	     printf("NEKTech_Shell: syntax error near unexpected command\n");
 	     exit(1);
