@@ -24,7 +24,7 @@
 #include <string.h>
 
 extern char *redirt_file;
-extern int redirection;
+extern int redirection, append;
 
 /*
  *NEKTech Research Labs
@@ -47,6 +47,9 @@ void nektech_run_cmd(char *argv[])
       exit(2);
    }else if(child_pid==0){
 	 if (redirection == 1){
+         if (append == 1)
+               fd = open(redirt_file, O_RDWR | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
+         else
                fd = open(redirt_file, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
                dup2(fd, 1);   // make stdout go to file
                dup2(fd, 2);   // make stderr go to file - you may choose to not do this
