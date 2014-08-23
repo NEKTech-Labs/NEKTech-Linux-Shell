@@ -43,7 +43,7 @@ int nektech_etc_passwd_search();
 int nektech_search_path(char *,int);
 
 char *nk_temp_arg[1];
-int redirection = 0; 
+int redirection = 0, append = 0; 
 char *redirt_file = NULL;
 
 int main() 
@@ -64,6 +64,7 @@ int main()
       cmd[cmdlen]='\0';
       redirt_file = NULL;
       redirection = 0;
+      append = 0;
 
       for(i=0;i<MAX_ARG;i++) cmd_arg[i]=NULL;
       i=0; j=0; tag=0;
@@ -98,9 +99,11 @@ int main()
       /* Handling Redirection out output to a file.*/
       i = 0;
       while (cmd_arg [i]){
-         if(strcmp(cmd_arg[i],">")==0 ){
+         if(strcmp(cmd_arg[i],">")==0 || strcmp(cmd_arg[i],">>")==0){
             if (cmd_arg[i+1] != NULL){
                redirt_file = cmd_arg[i+1];
+               if (strcmp(cmd_arg[i],">>")==0)
+                  append = 1;
                while (cmd_arg[i] != NULL){
                   cmd_arg[i++] = cmd_arg[i+2];
                }
