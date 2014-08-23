@@ -43,12 +43,14 @@ int nektech_etc_passwd_search();
 int nektech_search_path(char *,int);
 
 char *nk_temp_arg[1];
+int redirection = 0; 
+char *redirt_file = NULL;
 
 int main() 
 { 
    char cmd[MAX_LEN]; 
    char *cmd_arg[MAX_ARG]; 
-   int cmdlen,i,j,tag; 
+   int cmdlen,i,j,tag, pending_exec = 0, error = 0;
 
    do{
       /* init cmd */
@@ -60,6 +62,8 @@ int main()
       cmdlen=strlen(cmd);
       cmdlen--;
       cmd[cmdlen]='\0';
+      redirt_file = NULL;
+      redirection = 0;
 
       for(i=0;i<MAX_ARG;i++) cmd_arg[i]=NULL;
       i=0; j=0; tag=0;
@@ -89,6 +93,29 @@ int main()
       /* command change Directory */
       if(strcmp(cmd_arg[0],"cd")==0){
          nektech_change_dir(cmd_arg);
+         continue;
+      }
+      /* Handling Redirection out output to a file.*/
+      i = 0;
+      while (cmd_arg [i]){
+         if(strcmp(cmd_arg[i],">")==0 ){
+            if (cmd_arg[i+1] != NULL){
+               redirt_file = cmd_arg[i+1];
+               while (cmd_arg[i] != NULL){
+                  cmd_arg[i++] = cmd_arg[i+2];
+               }
+               redirection = 1;
+               break;
+            }
+            else{
+               error = 1;
+               break;
+            }
+         }
+         i++;
+      }
+      if (error){
+         printf ("SHELL PARSING ERROR. WRONG INPUT.\n");
          continue;
       }
       /* other cmd for fork/exec*/

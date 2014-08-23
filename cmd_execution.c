@@ -23,6 +23,9 @@
 #include <unistd.h>
 #include <string.h>
 
+extern char *redirt_file;
+extern int redirection;
+
 /*
  *NEKTech Research Labs
  *
@@ -34,7 +37,8 @@
  */
 void nektech_run_cmd(char *argv[]) 
 {
-pid_t child_pid;
+   pid_t child_pid;
+   int fd;
 
    child_pid=fork();
 
@@ -42,6 +46,12 @@ pid_t child_pid;
       printf("SOME ERROR HAPPENED IN FORK\n");
       exit(2);
    }else if(child_pid==0){
+	 if (redirection == 1){
+               fd = open(redirt_file, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+               dup2(fd, 1);   // make stdout go to file
+               dup2(fd, 2);   // make stderr go to file - you may choose to not do this
+               close(fd);     // fd no longer needed - Duped to another fd#s
+         }
          if(execvp(argv[0],argv)<0)
          switch(errno){
             case ENOENT:
