@@ -1,5 +1,5 @@
 This Software is Developed in NEK Tech Labs and used for educational 
-and learning Purpose of the students.
+and learning Purpose of the students.a
 
 This program is free software; you can redistribute it and/or modify
 it under the terms and conditions of NEK Tech.
@@ -12,6 +12,7 @@ Please run following commands on the Linux Terminal:
 make all
 sudo make install
 nektech_shell
-
+a
 To quit NEK Tech Shell, Please run quit/exit/q command on NEK Tech Shell.
 
+a
